@@ -128,29 +128,46 @@ export default function Home() {
     }
   };
 
+  // Get current date
+  const today = new Date();
+  const dateString = today.toLocaleDateString('en-US', {
+    weekday: 'short',
+    day: 'numeric',
+    month: 'short',
+    year: 'numeric'
+  });
+
   return (
-    <main className="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-7xl mx-auto">
-        {/* Header */}
-        <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-gray-900 mb-2">
-            Kundra Content Generator
-          </h1>
-          <p className="text-lg text-gray-600">
-            Generate sharp, original LinkedIn content ideas and articles
+    <main className="min-h-screen bg-gray-100">
+      {/* Header */}
+      <header className="bg-white border-b border-gray-200 px-8 py-6">
+        <h1 className="text-2xl font-bold text-gray-900">KUNDRA</h1>
+      </header>
+
+      <div className="max-w-4xl mx-auto px-8 py-12">
+        {/* Greeting Section */}
+        <div className="mb-8">
+          <h2 className="text-4xl font-bold text-gray-900 mb-2">
+            Good morning, Theresa!
+          </h2>
+          <p className="text-gray-600">
+            Today: {dateString}
           </p>
         </div>
 
         {/* Idea Generation Controls */}
-        <div className="bg-white rounded-lg shadow-md p-6 mb-8">
-          <h2 className="text-2xl font-semibold mb-4">Generate Ideas</h2>
+        <div className="bg-white rounded-lg shadow-sm p-8 mb-8">
+          <div className="mb-6">
+            <h3 className="text-2xl font-semibold text-gray-900 mb-1">Generate Ideas</h3>
+            <div className="w-16 h-1 bg-blue-600 rounded"></div>
+          </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
             {/* Style Selector */}
             <div>
               <label
                 htmlFor="style"
-                className="block text-sm font-medium text-gray-700 mb-2"
+                className="block text-sm font-medium text-gray-700 mb-3"
               >
                 Style
               </label>
@@ -158,7 +175,7 @@ export default function Home() {
                 id="style"
                 value={style}
                 onChange={(e) => setStyle(e.target.value as StyleType)}
-                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-gray-900"
                 disabled={loadingIdeas}
               >
                 <option value="blend">Blend (All Inspiration)</option>
@@ -172,7 +189,7 @@ export default function Home() {
             <div>
               <label
                 htmlFor="numIdeas"
-                className="block text-sm font-medium text-gray-700 mb-2"
+                className="block text-sm font-medium text-gray-700 mb-3"
               >
                 Number of Ideas
               </label>
@@ -183,7 +200,7 @@ export default function Home() {
                 max="20"
                 value={numIdeas}
                 onChange={(e) => setNumIdeas(parseInt(e.target.value) || 10)}
-                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-gray-900"
                 disabled={loadingIdeas}
               />
             </div>
@@ -193,8 +210,21 @@ export default function Home() {
           <button
             onClick={handleGenerateIdeas}
             disabled={loadingIdeas}
-            className="w-full bg-blue-600 text-white py-3 px-6 rounded-md font-semibold hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors"
+            className="w-full bg-blue-600 text-white py-4 px-6 rounded-lg font-semibold hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2 text-lg"
           >
+            <svg
+              className="w-5 h-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"
+              />
+            </svg>
             {loadingIdeas ? 'Generating Ideas...' : 'Generate Ideas'}
           </button>
 
@@ -209,29 +239,32 @@ export default function Home() {
         {/* Ideas Display */}
         {ideas.length > 0 && (
           <div className="mb-8">
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-2xl font-semibold">
-                Generated Ideas ({ideas.length})
-              </h2>
+            <div className="flex justify-between items-center mb-6">
+              <div>
+                <h3 className="text-2xl font-semibold text-gray-900 mb-1">
+                  Generated Ideas ({ideas.length})
+                </h3>
+                <div className="w-16 h-1 bg-blue-600 rounded"></div>
+              </div>
               <button
                 onClick={handleGenerateArticles}
                 disabled={selectedIdeaIds.size === 0 || loadingArticles}
-                className="bg-green-600 text-white py-2 px-6 rounded-md font-semibold hover:bg-green-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors"
+                className="bg-green-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-green-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors shadow-sm"
               >
                 {loadingArticles
                   ? 'Generating Articles...'
-                  : `Generate Articles (${selectedIdeaIds.size} selected)`}
+                  : `Generate Articles (${selectedIdeaIds.size})`}
               </button>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
               {ideas.map((idea) => (
                 <div
                   key={idea.id}
-                  className={`bg-white rounded-lg shadow-md p-6 border-2 transition-all cursor-pointer ${
+                  className={`bg-white rounded-lg shadow-sm p-6 border-2 transition-all cursor-pointer ${
                     selectedIdeaIds.has(idea.id)
                       ? 'border-blue-500 bg-blue-50'
-                      : 'border-transparent hover:border-gray-300'
+                      : 'border-gray-200 hover:border-gray-300 hover:shadow-md'
                   }`}
                   onClick={() => toggleIdeaSelection(idea.id)}
                 >
@@ -315,15 +348,18 @@ export default function Home() {
         {/* Articles Display */}
         {articles.length > 0 && (
           <div>
-            <h2 className="text-2xl font-semibold mb-4">
-              Generated Articles ({articles.length})
-            </h2>
+            <div className="mb-6">
+              <h3 className="text-2xl font-semibold text-gray-900 mb-1">
+                Generated Articles ({articles.length})
+              </h3>
+              <div className="w-16 h-1 bg-blue-600 rounded"></div>
+            </div>
 
-            <div className="space-y-6">
+            <div className="space-y-4">
               {articles.map((article) => (
                 <div
                   key={article.ideaId}
-                  className="bg-white rounded-lg shadow-md p-6"
+                  className="bg-white rounded-lg shadow-sm border border-gray-200 p-6"
                 >
                   {/* Article Header */}
                   <div className="flex justify-between items-start mb-4">
@@ -334,10 +370,10 @@ export default function Home() {
                       onClick={() =>
                         handleCopyArticle(article.ideaId, article.text)
                       }
-                      className={`ml-4 px-4 py-2 rounded-md font-semibold transition-colors ${
+                      className={`ml-4 px-5 py-2 rounded-lg font-semibold transition-colors shadow-sm ${
                         copiedArticleId === article.ideaId
                           ? 'bg-green-600 text-white'
-                          : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                          : 'bg-gray-100 text-gray-700 hover:bg-gray-200 border border-gray-300'
                       }`}
                     >
                       {copiedArticleId === article.ideaId ? '✓ Copied!' : 'Copy'}
